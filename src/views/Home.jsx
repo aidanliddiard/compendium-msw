@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import getQuotes from '../services/futurama';
 import QuoteCard from '../components/QuoteCard';
+import SearchBar from '../components/SearchBar';
 
 export default function Home() {
   const [quotes, setQuotes] = useState([]);
@@ -23,6 +24,7 @@ export default function Home() {
 
   return (
     <div>
+      <SearchBar />
       {quotes.map((quote) => (
         <QuoteCard key={quote.quote} {...quote} />
       ))}
