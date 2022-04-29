@@ -27,6 +27,8 @@ export default function Home() {
     }
   }, [query]);
 
+  console.log(quotes);
+
   if (loading) return <p>Loading...</p>;
 
   return (
