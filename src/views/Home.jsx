@@ -12,10 +12,13 @@ export default function Home() {
   useEffect(() => {
     try {
       const fetchData = async () => {
-        const data = await getQuotes();
-        setQuotes(data);
-        const searchData = await searchQuotes(query);
-        setQuotes(searchData);
+        if (query === '') {
+          const data = await getQuotes();
+          setQuotes(data);
+        } else {
+          const searchData = await searchQuotes(query);
+          setQuotes(searchData);
+        }
         setLoading(false);
       };
       fetchData();
