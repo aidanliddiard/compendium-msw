@@ -25,7 +25,6 @@ export default function Home() {
   }, [query]);
 
   if (loading) return <p>Loading...</p>;
-  //console.log(query);
 
   return (
     <div>
