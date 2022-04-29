@@ -1,8 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import App from './App';
 import userEvent from '@testing-library/user-event';
+
+global.fetch = fetch;
 
 const fakeQuotes = [
   {
@@ -12,7 +14,7 @@ const fakeQuotes = [
       'https://res.cloudinary.com/dzxqhkyqd/image/fetch/c_scale,w_500/https://res.cloudinary.com/dzxqhkyqd/image/upload/v1552429540/bender.png',
   },
   {
-    character: 'Dan',
+    character: 'Aidan',
     quote: 'Testing is so fun!',
     image:
       'https://res.cloudinary.com/dzxqhkyqd/image/fetch/c_scale,w_500/https://res.cloudinary.com/dzxqhkyqd/image/upload/v1552429540/bender.png',
@@ -21,6 +23,10 @@ const fakeQuotes = [
 
 const server = setupServer(
   rest.get('https://futuramaapi.herokuapp.com/api/quotes', (req, res, ctx) => {
+    const fakeSearch = req.url.searchParams.get('search');
+    if (fakeSearch) {
+      return res(ctx.json([fakeQuotes[0]]));
+    }
     return res(ctx.json(fakeQuotes));
   })
 );
@@ -37,7 +43,6 @@ describe('App', () => {
     screen.getByText('Futurama Compendium');
 
     const images = await screen.findAllByRole('img');
-    screen.debug();
     const quoteOne = await screen.findByText(fakeQuotes[0].quote);
 
     expect(images.length).toEqual(2);
@@ -46,8 +51,17 @@ describe('App', () => {
     const search = screen.getByPlaceholderText('Search quotes...');
     expect(search).toBeInTheDocument();
 
-    userEvent.type(search, 'love');
+    userEvent.type(search, 'much');
+    expect(search.value).toBe('much');
 
-    const result = await screen.findByText('Aidan');
+    userEvent.click(screen.getByRole('button'));
+
+    await waitFor(
+      () => {
+        const result = screen.getAllByRole('heading', { level: 3 });
+        expect(result.length).toEqual(1);
+      },
+      { timeout: 5000 }
+    );
   });
 });
