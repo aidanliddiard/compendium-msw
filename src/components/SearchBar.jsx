@@ -6,7 +6,10 @@ export default function SearchBar({ setQuery }) {
 
   return (
     <div>
-      <input onChange={(e) => setSearching(e.target.value)}></input>
+      <input
+        placeholder="Search quotes..."
+        onChange={(e) => setSearching(e.target.value)}
+      ></input>
       <button name="searching" onClick={() => setQuery(searching)}>
         Search Quotes
       </button>

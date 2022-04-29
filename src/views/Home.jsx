@@ -15,19 +15,18 @@ export default function Home() {
         if (query === '') {
           const data = await getQuotes();
           setQuotes(data);
+          setLoading(false);
         } else {
           const searchData = await searchQuotes(query);
           setQuotes(searchData);
+          setLoading(false);
         }
-        setLoading(false);
       };
       fetchData();
     } catch (error) {
       console.error(error.message);
     }
   }, [query]);
-
-  console.log(quotes);
 
   if (loading) return <p>Loading...</p>;
 
