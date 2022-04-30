@@ -56,7 +56,7 @@ describe('App', () => {
 
     userEvent.click(screen.getByRole('button'));
 
-    await waitFor(
+    return waitFor(
       () => {
         const result = screen.getAllByRole('heading', { level: 3 });
         expect(result.length).toEqual(1);
